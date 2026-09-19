@@ -21,7 +21,7 @@ export function DemoControls() {
           <div className="p-3">
             <Button
               size="sm"
-              variant="destructive"
+              variant="default"
               className="h-auto min-h-10 w-full justify-start whitespace-normal py-2 text-left text-xs font-bold"
               disabled={!fulfilled || shortageSimulated}
               onClick={simulateShortage}

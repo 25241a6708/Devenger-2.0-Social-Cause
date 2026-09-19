@@ -188,38 +188,38 @@
 .leaflet-popup-content-wrapper { border-radius: var(--radius); color: var(--foreground); }
 .leaflet-popup-content { margin: 14px; min-width: 205px; }
 
-/* SocialCause dark impact palette, shared by all views. */
+/* Warm community palette supersedes the earlier dark direction. */
 :root, .dark {
-  color-scheme: dark;
-  --background: oklch(0.168 0.019 264);
-  --foreground: oklch(1 0 0);
-  --card: oklch(0.208 0.042 266 / 0.8);
+  color-scheme: light;
+  --background: oklch(0.982 0.004 87);
+  --foreground: oklch(0.262 0.009 248);
+  --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
-  --popover: oklch(0.208 0.042 266);
+  --popover: var(--card);
   --popover-foreground: var(--foreground);
-  --primary: oklch(0.696 0.17 162.48);
-  --primary-foreground: oklch(0.16 0.035 163);
-  --positive: var(--primary);
-  --positive-foreground: var(--primary-foreground);
-  --secondary: oklch(0.26 0.035 264);
+  --primary: oklch(0.605 0.177 31);
+  --primary-foreground: oklch(1 0 0);
+  --positive: oklch(0.478 0.083 160);
+  --positive-foreground: oklch(1 0 0);
+  --secondary: oklch(0.951 0.015 85);
   --secondary-foreground: var(--foreground);
-  --muted: oklch(0.26 0.026 264);
-  --muted-foreground: oklch(0.714 0.019 261);
-  --accent: oklch(0.28 0.045 264);
+  --muted: oklch(0.949 0.011 80);
+  --muted-foreground: oklch(0.45 0.018 72);
+  --accent: oklch(0.944 0.023 40);
   --accent-foreground: var(--foreground);
-  --urgent: oklch(0.637 0.237 25.33);
-  --urgent-foreground: var(--foreground);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: var(--foreground);
-  --map: oklch(0.623 0.214 259.815);
-  --map-foreground: var(--foreground);
-  --amber: oklch(0.769 0.188 70.08);
-  --silver: oklch(0.78 0.018 260);
-  --bronze: oklch(0.68 0.12 60);
-  --border: oklch(0.31 0.035 264);
+  --urgent: oklch(0.545 0.195 27);
+  --urgent-foreground: oklch(1 0 0);
+  --destructive: var(--urgent);
+  --destructive-foreground: var(--urgent-foreground);
+  --map: oklch(0.59 0.129 247);
+  --map-foreground: oklch(1 0 0);
+  --amber: oklch(0.78 0.143 78);
+  --silver: oklch(0.8 0.012 80);
+  --bronze: oklch(0.7 0.103 58);
+  --border: oklch(0.908 0.012 80);
   --input: var(--border);
   --ring: var(--primary);
-  --overlay: oklch(0.1 0.01 264 / 0.8);
+  --overlay: oklch(0.262 0.009 248 / 0.45);
 }
 @theme inline {
   --color-amber: var(--amber);
@@ -230,15 +230,19 @@
 main { padding-bottom: 15rem !important; animation: page-enter 240ms ease-out; }
 main > div:first-child { max-width: 80rem; margin-inline: auto; min-width: 0; }
 button { max-width: 100%; }
-.bg-card { backdrop-filter: blur(12px); }
+.bg-card { box-shadow: 0 4px 18px color-mix(in oklab, var(--muted-foreground) 6%, transparent); }
 article { transition: transform 200ms ease, border-color 200ms ease; }
-@media (hover: hover) { article:hover { transform: translateY(-4px); border-color: color-mix(in oklab, var(--positive) 50%, var(--border)); } }
+@media (hover: hover) { article:hover { transform: translateY(-4px); border-color: color-mix(in oklab, var(--amber) 65%, var(--border)); } }
 header a[data-status="active"] { background: color-mix(in oklab, var(--positive) 15%, transparent); color: var(--positive); box-shadow: inset 0 -2px var(--positive); }
 .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--popover); }
 .leaflet-container { background: var(--background); }
-.marker-pin { border-radius: 50%; box-shadow: 0 0 18px currentColor; }
-.text-map > svg, svg.text-map { filter: drop-shadow(0 0 5px color-mix(in oklab, var(--map) 35%, transparent)); }
+.marker-pin { border-radius: 50%; box-shadow: 0 3px 9px color-mix(in oklab, var(--foreground) 20%, transparent); }
+
 @keyframes page-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
+
+.grid-surface { background-image: none; }
+.leaflet-tile-pane { filter: sepia(0.13) saturate(0.85); }
+header a[aria-label="SocialCause home"] > span:first-child { background: var(--primary); color: var(--primary-foreground); }
