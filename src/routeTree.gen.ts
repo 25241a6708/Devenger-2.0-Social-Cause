@@ -10,33 +10,91 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ImpactMapRouteImport } from './routes/impact-map'
+import { Route as LeaderboardRouteImport } from './routes/leaderboard'
+import { Route as MissionsRouteImport } from './routes/missions'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as SosRouteImport } from './routes/sos'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ImpactMapRoute = ImpactMapRouteImport.update({
+  id: '/impact-map',
+  path: '/impact-map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeaderboardRoute = LeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MissionsRoute = MissionsRouteImport.update({
+  id: '/missions',
+  path: '/missions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SosRoute = SosRouteImport.update({
+  id: '/sos',
+  path: '/sos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/impact-map': typeof ImpactMapRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/missions': typeof MissionsRoute
+  '/profile': typeof ProfileRoute
+  '/sos': typeof SosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/impact-map': typeof ImpactMapRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/missions': typeof MissionsRoute
+  '/profile': typeof ProfileRoute
+  '/sos': typeof SosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/impact-map': typeof ImpactMapRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/missions': typeof MissionsRoute
+  '/profile': typeof ProfileRoute
+  '/sos': typeof SosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/impact-map' | '/leaderboard' | '/missions' | '/profile' | '/sos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/impact-map' | '/leaderboard' | '/missions' | '/profile' | '/sos'
+  id:
+    | '__root__'
+    | '/'
+    | '/impact-map'
+    | '/leaderboard'
+    | '/missions'
+    | '/profile'
+    | '/sos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ImpactMapRoute: typeof ImpactMapRoute
+  LeaderboardRoute: typeof LeaderboardRoute
+  MissionsRoute: typeof MissionsRoute
+  ProfileRoute: typeof ProfileRoute
+  SosRoute: typeof SosRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +106,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/impact-map': {
+      id: '/impact-map'
+      path: '/impact-map'
+      fullPath: '/impact-map'
+      preLoaderRoute: typeof ImpactMapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leaderboard': {
+      id: '/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof LeaderboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/missions': {
+      id: '/missions'
+      path: '/missions'
+      fullPath: '/missions'
+      preLoaderRoute: typeof MissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sos': {
+      id: '/sos'
+      path: '/sos'
+      fullPath: '/sos'
+      preLoaderRoute: typeof SosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ImpactMapRoute: ImpactMapRoute,
+  LeaderboardRoute: LeaderboardRoute,
+  MissionsRoute: MissionsRoute,
+  ProfileRoute: ProfileRoute,
+  SosRoute: SosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
