@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { BadgeCheck, Crown, Medal, Trophy } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { contributors } from "@/lib/impact-data";
 
 export const Route = createFileRoute("/leaderboard")({
@@ -20,15 +21,15 @@ export const Route = createFileRoute("/leaderboard")({
 const filters = ["All", "Restaurant", "Corporate", "NGO", "Individual"] as const;
 
 const podiumStyle = [
-  { label: "Gold", ring: "border-[#f0b429]", chip: "bg-[#f0b429] text-[#3d2c00]", icon: Crown, lift: "lg:-translate-y-6" },
-  { label: "Silver", ring: "border-[#adb5bd]", chip: "bg-[#adb5bd] text-[#1f2933]", icon: Trophy, lift: "" },
-  { label: "Bronze", ring: "border-[#c98a4b]", chip: "bg-[#c98a4b] text-white", icon: Medal, lift: "" },
+  { label: "Gold", ring: "border-amber", chip: "bg-amber text-background", icon: Crown, lift: "lg:-translate-y-6" },
+  { label: "Silver", ring: "border-silver", chip: "bg-silver text-background", icon: Trophy, lift: "" },
+  { label: "Bronze", ring: "border-bronze", chip: "bg-bronze text-background", icon: Medal, lift: "" },
 ];
 
 function LeaderboardPage() {
   const [filter, setFilter] = useState<(typeof filters)[number]>("All");
   const rows = useMemo(() => (filter === "All" ? contributors : contributors.filter((c) => c.category === filter)), [filter]);
-  const podium = [contributors[1]!, contributors[0]!, contributors[2]!];
+  const podium = [contributors[1], contributors[0], contributors[2]];
 
   return (
     <main className="grid-surface px-4 py-8 lg:px-8 lg:py-10">
@@ -36,9 +37,11 @@ function LeaderboardPage() {
         <h1 className="text-3xl font-extrabold md:text-4xl">Leaderboard</h1>
         <p className="mt-2 text-sm text-muted-foreground">Verified contributors ranked by coordinated impact this season.</p>
 
-        <div className="mt-8 grid gap-5 lg:grid-cols-3 lg:items-end">
+        <div className="mt-12 grid gap-5 lg:grid-cols-3 lg:items-end">
           {podium.map((c) => {
-            const style = podiumStyle[c.rank - 1]!;
+            if (!c) return null;
+            const style = podiumStyle[c.rank - 1];
+            if (!style) return null;
             const Icon = style.icon;
             return (
               <div key={c.name} className={`rounded-lg border-2 ${style.ring} bg-card p-6 text-center shadow-sm ${style.lift}`}>
@@ -58,7 +61,7 @@ function LeaderboardPage() {
 
         <div className="mt-8 flex flex-wrap gap-2">
           {filters.map((f) => (
-            <button
+            <Button variant="ghost"
               key={f}
               onClick={() => setFilter(f)}
               className={`rounded-md px-3.5 py-2 text-xs font-bold transition-colors ${
@@ -66,7 +69,7 @@ function LeaderboardPage() {
               }`}
             >
               {f}
-            </button>
+            </Button>
           ))}
         </div>
 

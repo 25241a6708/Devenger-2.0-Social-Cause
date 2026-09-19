@@ -35,17 +35,17 @@ function ProfilePage() {
     <main className="grid-surface px-4 py-8 lg:px-8 lg:py-10">
       <div className="mx-auto max-w-[1300px]">
         <section className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
-          <div className="flex flex-wrap items-center gap-5 border-b border-border p-6">
+          <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 sm:flex sm:flex-wrap border-b border-border p-6">
             <span className="grid size-16 place-items-center rounded-lg bg-foreground text-background">
               <UserRound className="size-8" />
             </span>
             <div>
-              <h1 className="flex items-center gap-2 text-2xl font-extrabold">
-                Jashwanth Reddy <BadgeCheck className="size-5 text-map" />
+              <h1 className="flex min-w-0 items-center gap-2 text-xl sm:text-2xl font-extrabold">
+                Jashwanth Reddy <BadgeCheck className="size-5 shrink-0 text-map" />
               </h1>
               <p className="mt-1 text-sm font-semibold text-muted-foreground">Impact Champion · Level 4</p>
             </div>
-            <div className="ml-auto w-full max-w-xs">
+            <div className="col-span-2 sm:ml-auto w-full max-w-xs">
               <div className="mb-2 flex justify-between text-xs font-bold">
                 <span>Progress to Level 5</span><span className="text-positive">76%</span>
               </div>
@@ -59,7 +59,7 @@ function ProfilePage() {
               const Icon = s.icon;
               return (
                 <div key={s.label} className="rounded-lg border border-border p-5">
-                  <Icon className="size-5 text-map" />
+                  <Icon className="size-5 shrink-0 text-map" />
                   <p className="mt-3 text-3xl font-extrabold">{s.value}</p>
                   <p className="text-xs text-muted-foreground">{s.label}</p>
                 </div>
@@ -86,7 +86,7 @@ function ProfilePage() {
 
           <aside className="rounded-lg border border-border bg-card shadow-sm">
             <div className="flex items-center gap-2 border-b border-border px-5 py-4">
-              <Award className="size-5 text-[#f0b429]" />
+              <Award className="size-5 text-amber" />
               <h2 className="text-lg font-extrabold">Earned Badges</h2>
             </div>
             <div className="grid gap-3 p-5">

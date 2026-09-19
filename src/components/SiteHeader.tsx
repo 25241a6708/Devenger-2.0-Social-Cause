@@ -16,9 +16,9 @@ export function SiteHeader() {
   const { points } = useMatchEngine();
   return (
     <header className="sticky top-0 z-[1000] border-b border-border bg-card/95 backdrop-blur">
-      <div className="mx-auto flex max-w-[1600px] flex-col px-4 lg:px-8">
-        <div className="flex h-16 items-center justify-between gap-6">
-          <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label="SocialCause home">
+      <div className="mx-auto flex max-w-7xl flex-col px-4 lg:px-8">
+        <div className="grid h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 xl:flex xl:justify-between">
+          <Link to="/" className="flex min-w-0 items-center gap-2.5" aria-label="SocialCause home">
             <span className="grid size-9 place-items-center rounded-md bg-foreground text-background">
               <HeartHandshake className="size-5" strokeWidth={2.4} />
             </span>
@@ -32,7 +32,7 @@ export function SiteHeader() {
                 to={l.to}
                 activeOptions={{ exact: l.to === "/" }}
                 className="whitespace-nowrap rounded-md px-3 py-2 text-xs font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                activeProps={{ className: "bg-foreground text-background hover:bg-foreground hover:text-background" }}
+                activeProps={{ className: "bg-positive/15 text-positive hover:bg-positive/20 hover:text-positive" }}
               >
                 {l.label}
               </Link>
@@ -59,7 +59,7 @@ export function SiteHeader() {
               to={l.to}
               activeOptions={{ exact: l.to === "/" }}
               className="whitespace-nowrap rounded-md px-2.5 py-1.5 text-xs font-bold text-muted-foreground"
-              activeProps={{ className: "bg-foreground text-background" }}
+              activeProps={{ className: "bg-positive/15 text-positive" }}
             >
               {l.label}
             </Link>
