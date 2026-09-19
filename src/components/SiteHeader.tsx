@@ -17,15 +17,15 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-[1000] border-b border-border bg-card/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl flex-col px-4 lg:px-8">
-        <div className="grid h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 xl:flex xl:justify-between">
-          <Link to="/" className="flex min-w-0 items-center gap-2.5" aria-label="SocialCause home">
-            <span className="grid size-9 place-items-center rounded-md bg-foreground text-background">
+        <div className="grid h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 ">
+          <Link to="/" className="flex min-w-0 shrink-0 items-center gap-2.5" aria-label="SocialCause home">
+            <span className="grid size-9 shrink-0 place-items-center rounded-md bg-foreground text-background">
               <HeartHandshake className="size-5" strokeWidth={2.4} />
             </span>
             <span className="text-lg font-extrabold">SocialCause</span>
           </Link>
 
-          <nav className="hidden items-center gap-1 xl:flex" aria-label="Main navigation">
+          <nav className="hidden" aria-label="Main navigation">
             {links.map((l) => (
               <Link
                 key={l.to}
@@ -52,7 +52,7 @@ export function SiteHeader() {
           </div>
         </div>
 
-        <nav className="flex gap-4 overflow-x-auto border-t border-border py-2 xl:hidden" aria-label="Mobile navigation">
+        <nav className="flex gap-4 overflow-x-auto border-t border-border py-2" aria-label="Mobile navigation">
           {links.map((l) => (
             <Link
               key={l.to}
@@ -72,7 +72,7 @@ export function SiteHeader() {
 
 function Metric({ value, label }: { value: string; label: string }) {
   return (
-    <div className="whitespace-nowrap">
+    <div className="whitespace-nowrap rounded-full border border-border bg-secondary/60 px-3 py-1.5">
       <span className="text-sm font-extrabold text-positive">{value}</span>
       <span className="ml-1.5 text-[11px] font-semibold text-muted-foreground">{label}</span>
     </div>
