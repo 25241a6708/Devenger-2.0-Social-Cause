@@ -59,7 +59,7 @@ function Dashboard() {
                   {fulfilled ? (
                     <p className="text-xs font-semibold text-positive">100% Complete 🎉</p>
                   ) : (
-                    <p className="text-xs font-semibold text-urgent">30 Meals Remaining</p>
+                    <p className="text-xs font-semibold text-urgent">{100 - mealsFulfilled} Meals Remaining</p>
                   )}
                 </div>
                 <div className="h-3 overflow-hidden rounded-full bg-muted">

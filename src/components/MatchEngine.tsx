@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
-import { ArrowRight, CheckCircle2, Gauge, MapPin, Package, ShieldCheck, Timer, TriangleAlert, Zap } from "lucide-react";
+import { ArrowRight, CheckCircle2, Gauge, MapPin, Minus, Plus, Package, ShieldCheck, Timer, TriangleAlert, Zap } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { z } from "zod";
 import { toast } from "sonner";
 
 export type MatchRequest = {
@@ -240,7 +241,17 @@ export function MatchEngineProvider({ children }: { children: ReactNode }) {
   const [breakdown, setBreakdown] = useState<MatchCandidate | null>(null);
 
   // Prompt 3 — contribution coordination & dynamic rematching state
-  const [fulfilled, setFulfilled] = useState(false);
+  const [mealsFulfilled, setMealsFulfilled] = useState(70);
+  const fulfilled = mealsFulfilled === 100;
+  const [selected, setSelected] = useState<MatchCandidate | null>(null);
+  const [quantity, setQuantity] = useState("30");
+  const [supplies, setSupplies] = useState<Record<string, number>>({});
+  const gap = 100 - mealsFulfilled;
+  const available = selected ? (supplies[selected.id] ?? selected.available) : 0;
+  const maximum = Math.min(gap, available);
+  const parsed = z.number().int().min(1).max(maximum).safeParse(Number(quantity));
+  const valid = quantity.trim() !== "" && parsed.success;
+  const qty = valid ? Number(quantity) : 0;
   const [points, setPoints] = useState(380);
   const [feed, setFeed] = useState<{ title: string; meta: string }[]>([]);
   const [celebrate, setCelebrate] = useState(false);
@@ -249,28 +260,33 @@ export function MatchEngineProvider({ children }: { children: ReactNode }) {
 
   const open = useCallback((req: MatchRequest) => setRequest(req), []);
 
-  const coordinate = useCallback((candidate: MatchCandidate) => {
-    setFulfilled(true);
-    setShortageSimulated(false);
-    setPoints((p) => p + 30);
-    setFeed((f) => [
-      {
-        title: `Coordinated 30 meals from ${candidate.name.replace(" Restaurant", "")} to Hope Community Center.`,
-        meta: "Just now · Impact Matching Engine",
-      },
-      ...f,
-    ]);
-    setCelebrate(true);
-    window.setTimeout(() => setCelebrate(false), 4000);
-    toast.success("Mission fulfilled!", {
-      description: `${candidate.name} covers the remaining 30 meals — 100/100 complete. +30 Impact Points.`,
+  const coordinate = () => {
+    if (!selected) return;
+    const result = z.number().int().min(1).max(Math.min(100 - mealsFulfilled, supplies[selected.id] ?? selected.available)).safeParse(Number(quantity));
+    if (!result.success || !quantity.trim()) return;
+    const amount = result.data;
+    const completed = mealsFulfilled + amount === 100;
+    setMealsFulfilled((n) => n + amount);
+    setSupplies((s) => ({ ...s, [selected.id]: (s[selected.id] ?? selected.available) - amount }));
+    setPoints((p) => p + amount);
+    setFeed((f) => [{
+      title: `Coordinated ${amount} meals from ${selected.id === "freshbite" ? "Restaurant A" : selected.name} to Hope Community Center.`,
+      meta: "Just now · Impact Matching Engine",
+    }, ...f]);
+    if (completed) {
+      setCelebrate(true);
+      window.setTimeout(() => setCelebrate(false), 4000);
+    }
+    toast.success(completed ? "Mission fulfilled!" : "Contribution dispatched!", {
+      description: `${amount} meals coordinated. +${amount} Impact Points.`,
     });
+    setSelected(null);
     setRequest(null);
-  }, []);
+  };
 
   const simulateShortage = useCallback(() => {
     if (!fulfilled || shortageSimulated) return;
-    setFulfilled(false);
+    setMealsFulfilled(70);
     setShortageSimulated(true);
     toast.warning("⚠️ Supply shortage detected! Re-running Impact Matching Engine...", {
       description: "Restaurant A supply dropped 60 → 30 meals. New 30-meal gap detected.",
@@ -280,7 +296,7 @@ export function MatchEngineProvider({ children }: { children: ReactNode }) {
 
   const acceptRematch = useCallback(() => {
     setRematchOpen(false);
-    setFulfilled(true);
+    setMealsFulfilled(100);
     setFeed((f) => [
       {
         title: "Accepted rematch: 30 meals from Local Grocery to Hope Community Center.",
@@ -301,7 +317,7 @@ export function MatchEngineProvider({ children }: { children: ReactNode }) {
     () => ({
       open,
       fulfilled,
-      mealsFulfilled: fulfilled ? 100 : 70,
+      mealsFulfilled,
       points,
       feed,
       celebrate,
@@ -311,7 +327,7 @@ export function MatchEngineProvider({ children }: { children: ReactNode }) {
       acceptRematch,
       dismissRematch,
     }),
-    [open, fulfilled, points, feed, celebrate, shortageSimulated, simulateShortage, rematchOpen, acceptRematch, dismissRematch],
+    [open, fulfilled, mealsFulfilled, points, feed, celebrate, shortageSimulated, simulateShortage, rematchOpen, acceptRematch, dismissRematch],
   );
 
   return (
@@ -319,7 +335,7 @@ export function MatchEngineProvider({ children }: { children: ReactNode }) {
       {children}
       {celebrate && <ConfettiBurst />}
 
-      <Dialog open={!!request} onOpenChange={(o) => !o && setRequest(null)}>
+      <Dialog open={!!request && !selected} onOpenChange={(o) => !o && setRequest(null)}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[680px]">
           <DialogHeader>
             <div className="mb-1 flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-wide text-muted-foreground">
@@ -334,7 +350,7 @@ export function MatchEngineProvider({ children }: { children: ReactNode }) {
           </DialogHeader>
 
           <p className="rounded-md bg-muted/60 px-3 py-2 text-xs font-bold text-muted-foreground">
-            Recommending partners for the 30 remaining meals · Hope Community Center · deadline 7:00 PM
+            Recommending partners for the {gap} remaining meals · Hope Community Center · deadline 7:00 PM
           </p>
 
           <div className="space-y-4">
@@ -353,7 +369,7 @@ export function MatchEngineProvider({ children }: { children: ReactNode }) {
                         {candidate.verified && <CheckCircle2 className="size-4 text-positive" aria-label="Verified Contributor" />}
                       </div>
                       <p className="mt-1 text-xs text-muted-foreground">
-                        Available: {candidate.available} meals · Distance: {candidate.distanceKm} km away · Verified Contributor ✓
+                        Available: {supplies[candidate.id] ?? candidate.available} meals · Distance: {candidate.distanceKm} km away · Verified Contributor ✓
                       </p>
                     </div>
                     <span
@@ -368,7 +384,7 @@ export function MatchEngineProvider({ children }: { children: ReactNode }) {
                     <Button variant="outline" className="flex-1" onClick={() => setBreakdown(candidate)}>
                       WHY THIS MATCH?
                     </Button>
-                    <Button variant="impact" className="flex-1" onClick={() => coordinate(candidate)}>
+                    <Button variant="impact" className="flex-1" disabled={gap === 0 || (supplies[candidate.id] ?? candidate.available) === 0} onClick={() => { setQuantity(String(Math.min(gap, supplies[candidate.id] ?? candidate.available))); setSelected(candidate); }}>
                       COORDINATE CONTRIBUTION <ArrowRight />
                     </Button>
                   </div>
@@ -376,6 +392,39 @@ export function MatchEngineProvider({ children }: { children: ReactNode }) {
               );
             })}
           </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[520px]">
+          <DialogHeader>
+            <DialogTitle>Coordinate contribution</DialogTitle>
+            <DialogDescription>{selected?.name} → Hope Community Center</DialogDescription>
+          </DialogHeader>
+          <div className="grid grid-cols-2 gap-4 rounded-lg border bg-muted/40 p-4 text-sm">
+            <p>Total Needed Gap<strong className="mt-1 block text-lg">{gap} meals</strong></p>
+            <p>Contributor Available Supply<strong className="mt-1 block text-lg">{available} meals</strong></p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {[...new Set([10, 20, maximum])].filter((n) => n > 0 && n <= maximum).sort((a,b) => a-b).map((n) => (
+              <Button key={n} variant={qty === n ? "secondary" : "outline"} aria-pressed={qty === n} onClick={() => setQuantity(String(n))}>
+                {n} Meals{n === gap ? " (Full Gap)" : ""}
+              </Button>
+            ))}
+          </div>
+          <label htmlFor="contribution-quantity" className="text-sm font-bold">Quantity (meals)</label>
+          <div className="flex items-center gap-3">
+            <Button variant="outline" size="icon" aria-label="Decrease quantity" disabled={valid && qty <= 1} onClick={() => setQuantity(String(Math.max(1, qty - 1)))}><Minus /></Button>
+            <input id="contribution-quantity" type="number" inputMode="numeric" min={1} max={maximum} step={1} value={quantity} aria-invalid={!valid} aria-describedby={!valid ? "quantity-error" : undefined} onChange={(e) => setQuantity(e.target.value)} className="h-11 min-w-0 flex-1 rounded-md border border-input bg-background px-3 text-center text-lg font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
+            <Button variant="outline" size="icon" aria-label="Increase quantity" disabled={valid && qty >= maximum} onClick={() => setQuantity(String(Math.min(maximum, qty + 1)))}><Plus /></Button>
+          </div>
+          {!valid && <p id="quantity-error" role="alert" className="text-sm text-destructive">Enter a whole number between 1 and {maximum} meals.</p>}
+          <div aria-live="polite" className="space-y-3 border-y py-4 text-sm">
+            <p>New Progress: <strong>{mealsFulfilled} + {valid ? qty : "—"} / 100 Meals</strong></p>
+            <p className="text-positive">Impact Points Earned: <strong>+{valid ? qty : "—"} Points</strong></p>
+            <p>Remaining Gap After Contribution: <strong>{valid ? gap - qty : "—"} Meals</strong></p>
+          </div>
+          <Button disabled={!valid} onClick={coordinate} className="h-auto min-h-12 whitespace-normal bg-positive text-positive-foreground hover:bg-positive/90">CONFIRM &amp; DISPATCH {valid ? qty : "—"} MEALS <ArrowRight /></Button>
         </DialogContent>
       </Dialog>
 
