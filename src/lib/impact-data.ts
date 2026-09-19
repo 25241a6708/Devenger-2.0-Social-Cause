@@ -14,10 +14,10 @@ export type ImpactLocation = {
 };
 
 export const categoryMeta: Record<PinCategory, { label: string; color: string; ring: string; text: string }> = {
-  urgent: { label: "Urgent Resource Need", color: "#e03131", ring: "bg-[#e03131]", text: "text-[#e03131]" },
-  care: { label: "Orphanage & Care Home", color: "#f76707", ring: "bg-[#f76707]", text: "text-[#f76707]" },
-  environment: { label: "Environmental & Community", color: "#f0b429", ring: "bg-[#f0b429]", text: "text-[#b07d0a]" },
-  contributor: { label: "Verified Contributor", color: "#3b5bdb", ring: "bg-[#3b5bdb]", text: "text-[#3b5bdb]" },
+  urgent: { label: "Urgent Resource Need", color: "var(--urgent)", ring: "bg-urgent", text: "text-urgent" },
+  care: { label: "Orphanage & Care Home", color: "var(--amber)", ring: "bg-amber", text: "text-amber" },
+  environment: { label: "Environmental & Community", color: "var(--amber)", ring: "bg-amber", text: "text-amber" },
+  contributor: { label: "Verified Contributor", color: "var(--map)", ring: "bg-map", text: "text-map" },
 };
 
 export const HYDERABAD: [number, number] = [17.5169, 78.3844];

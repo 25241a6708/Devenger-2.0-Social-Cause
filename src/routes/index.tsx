@@ -109,7 +109,7 @@ function Dashboard() {
           <section className="rounded-lg border border-border bg-card shadow-sm">
             <div className="flex items-center justify-between border-b border-border px-5 py-4">
               <div className="flex items-center gap-2">
-                <Crown className="size-5 text-[#f0b429]" />
+                <Crown className="size-5 text-amber" />
                 <h2 className="text-lg font-extrabold">Top Contributor</h2>
               </div>
               <Link to="/leaderboard" className="text-xs font-bold text-map hover:underline">View leaderboard</Link>

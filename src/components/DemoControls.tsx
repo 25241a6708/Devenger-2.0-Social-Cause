@@ -8,25 +8,25 @@ export function DemoControls() {
   const { fulfilled, shortageSimulated, simulateShortage } = useMatchEngine();
 
   return (
-    <div className="fixed bottom-5 right-5 z-[1200] w-[280px]">
+    <div className="fixed bottom-4 right-4 z-[1200] w-[280px] max-w-[calc(100vw-2rem)]">
       <div className="overflow-hidden rounded-lg border border-border bg-card shadow-lg">
-        <button
+        <Button variant="ghost" aria-expanded={open} aria-label="Toggle Demo Controls"
           onClick={() => setOpen((v) => !v)}
-          className="flex w-full items-center justify-between gap-2 border-b border-border px-3 py-2.5 text-xs font-extrabold uppercase"
+          className="flex h-auto w-full items-center justify-between gap-2 border-b border-border px-3 py-2.5 text-xs font-extrabold uppercase"
         >
-          <span className="inline-flex items-center gap-2"><Zap className="size-4 text-[#f0b429]" /> ⚡ Demo Controls</span>
+          <span className="inline-flex items-center gap-2"><Zap className="size-4 text-amber" /> ⚡ Demo Controls</span>
           <span className="text-muted-foreground">{open ? "−" : "+"}</span>
-        </button>
+        </Button>
         {open && (
           <div className="p-3">
             <Button
               size="sm"
-              variant="secondary"
-              className="w-full justify-start text-left text-xs font-bold"
+              variant="destructive"
+              className="h-auto min-h-10 w-full justify-start whitespace-normal py-2 text-left text-xs font-bold"
               disabled={!fulfilled || shortageSimulated}
               onClick={simulateShortage}
             >
-              <Sparkles className="size-3.5 shrink-0 text-urgent" />
+              <Sparkles className="size-3.5 shrink-0" />
               Simulate Restaurant A Supply Drop (60 → 30 meals)
             </Button>
             {!fulfilled && !shortageSimulated && (

@@ -42,7 +42,7 @@ function SosPage() {
       <div className="mx-auto max-w-[1200px]">
         <div className="relative overflow-hidden rounded-lg border-2 border-urgent bg-urgent p-6 text-urgent-foreground shadow-lg">
           <span className="absolute inset-0 animate-pulse bg-urgent/60" />
-          <div className="relative flex flex-wrap items-center gap-4">
+          <div className="relative grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
             <Siren className="size-8" />
             <h1 className="text-xl font-extrabold uppercase tracking-tight md:text-2xl">
               🔴 Critical SOS Emergency Requests — Immediate Dispatch
@@ -69,7 +69,7 @@ function SosPage() {
               <Button
                 variant="destructive"
                 size="xl"
-                className="mt-6 w-full"
+                className="mt-6 h-auto min-h-12 w-full whitespace-normal py-3"
                 onClick={() => open({ title: e.title, org: e.location, need: e.need, urgent: true })}
               >
                 DISPATCH IMMEDIATE HELP / RESPOND TO SOS

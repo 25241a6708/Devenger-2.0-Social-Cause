@@ -24,8 +24,8 @@ const categories = ["All", "Food", "Orphanages", "Cleaning", "Blood Donation"] a
 
 const urgencyStyle: Record<string, string> = {
   Urgent: "bg-urgent text-urgent-foreground",
-  "High Priority": "bg-[#f76707] text-white",
-  "This Saturday": "bg-[#f0b429] text-[#3d2c00]",
+  "High Priority": "bg-amber text-background",
+  "This Saturday": "bg-amber text-background",
   Ongoing: "bg-muted text-muted-foreground",
 };
 
