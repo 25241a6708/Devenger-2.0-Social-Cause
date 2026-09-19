@@ -88,7 +88,7 @@ function ImpactMapPage() {
           </div>
           <div className="p-5">
             <span
-              className="inline-flex rounded-sm px-2 py-1 text-[10px] font-extrabold uppercase text-white"
+              className="inline-flex rounded-sm px-2 py-1 text-[10px] font-extrabold uppercase text-foreground"
               style={{ background: categoryMeta[selected.category].color }}
             >
               {categoryMeta[selected.category].label}
